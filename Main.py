@@ -92,7 +92,7 @@ def execute_kfold():
     mean1 = np.mean(accuracyGauss)
     mean2 = np.mean(accuracyKnn)
 
-    return mean1, mean2
+    return round(mean1,3), round(mean2,3)
 
 #ten kfold
 run = 1
