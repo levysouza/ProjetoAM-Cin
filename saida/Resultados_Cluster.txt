@@ -10,6 +10,6 @@
  A quantidade de elementos no cluster 8 é 387
  A quantidade de elementos no cluster 9 é 41
 
- O Índice Rand Ajustado é 0.26278789161101923
+ O Índice Rand Ajustado é 0.27491725624764357
 
  A melhor execução foi a de número 51
