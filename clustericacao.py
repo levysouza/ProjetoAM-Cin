@@ -88,13 +88,13 @@ classes = []
 for i in matrix_fuzzy:
     ind_cluster = numpy.argmax(i)
     clusters.append(ind_cluster)
-    if (controle_classe == 200):
-        valor_classe += 1
+    if (controle_classe == 199):
         classes.append(valor_classe)
-        controle_classe = 1
+        valor_classe += 1
+        controle_classe = 0
     else:
         classes.append(valor_classe)
-    controle_classe += 1
+        controle_classe += 1
     i = i.tolist()
     for j in range(len(i)):
         if (ind_cluster == j):
