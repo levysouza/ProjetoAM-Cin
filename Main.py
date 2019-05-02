@@ -23,30 +23,39 @@ scaler = preprocessing.StandardScaler().fit(x1)
 x1Normalized = scaler.transform(x1)
 
 # set y
-y = []
+x = []
 
-#put labels
-for i in range(len(x1)):
-    if (i>=0 and i<=199):
-        y.append(0)
-    elif (i>=200 and i<=399):
-        y.append(1)
-    elif (i>=400 and i<=599):
-        y.append(2)
-    elif (i>=600 and i<=799):
-        y.append(3)
-    elif (i>=800 and i<=999):
-        y.append(4)
-    elif (i>=1000 and i<=1199):
-        y.append(5)
-    elif (i>=1200 and i<=1399):
-        y.append(6)
-    elif (i>=1400 and i<=1599):
-        y.append(7)
-    elif (i>=1600 and i<=1799):
-        y.append(8)
-    elif (i>=1800 and i<=1999):
-        y.append(9)
+# put labels
+# for i in range(len(x1)):
+#    if (i>=0 and i<=199):
+#        y.append(0)
+#    elif (i>=200 and i<=399):
+#        y.append(1)
+#    elif (i>=400 and i<=599):
+#        y.append(2)
+#    elif (i>=600 and i<=799):
+#        y.append(3)
+#    elif (i>=800 and i<=999):
+#        y.append(4)
+#    elif (i>=1000 and i<=1199):
+#        y.append(5)
+#    elif (i>=1200 and i<=1399):
+#        y.append(6)
+#    elif (i>=1400 and i<=1599):
+#        y.append(7)
+#    elif (i>=1600 and i<=1799):
+#        y.append(8)
+#    elif (i>=1800 and i<=1999):
+#        y.append(9)
+
+with open('saida/Nova_Classe_Y.txt') as f:
+    x = f.read().splitlines()
+
+    f.close()
+
+y = []
+for i in range(0, len(x)):
+    y.append(int(x[i]))
 
 
 def execute_kfold():
