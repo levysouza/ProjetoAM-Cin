@@ -1,0 +1,15 @@
+
+ A quantidade de elementos no cluster 0 é 30
+ A quantidade de elementos no cluster 1 é 397
+ A quantidade de elementos no cluster 2 é 223
+ A quantidade de elementos no cluster 3 é 82
+ A quantidade de elementos no cluster 4 é 98
+ A quantidade de elementos no cluster 5 é 237
+ A quantidade de elementos no cluster 6 é 37
+ A quantidade de elementos no cluster 7 é 468
+ A quantidade de elementos no cluster 8 é 387
+ A quantidade de elementos no cluster 9 é 41
+
+ O Índice Rand Ajustado é 0.26278789161101923
+
+ A melhor execução foi a de número 51

@@ -1,5 +1,7 @@
-from Util import readDatabase, getInitialG, getInitialL, getInitialU, argmaxIndex
+from Util import readDatabase, getInitialG, getInitialL, getInitialU, argmaxIndex, saveParameters, saveMatrix, saveResults
 import numpy
+import pandas as pd
+from sklearn.metrics.cluster import adjusted_rand_score
 from equacoes import J, update_G, update_L, update_U
 
 #definição dos datasets (matrizes de dissimilaridade dos datasets com dados já normalizados(z))
@@ -10,10 +12,11 @@ G_lista_final = []
 L_lista_final = []
 U_lista_final = []
 J_lista_final = []
+todos_J_exec = []
 
-for exe in range(4):
+for exe in range(100):
     #definição dos parâmetros
-    print("Inicializando parametros iniciais da execucao "+str(exe))
+    print("Inicializando parametros iniciais da execucao "+str(exe+1))
     K = 10
     m = 1.6
     T = 150
@@ -53,6 +56,8 @@ for exe in range(4):
         if(j_diferenca<epsilon):
             print("break por diferenca menor de que epsilon")
             break
+
+    todos_J_exec.append(j_check)
     G_lista_final.append(g_check[-1])
     L_lista_final.append(l_check[-1])
     U_lista_final.append(u_check[-1])
@@ -62,13 +67,56 @@ for exe in range(4):
 #print(L_lista_final)
 #print(U_lista_final)
 #print(J_lista_final)
+#print(j_check)
 
-melhorExe = argmaxIndex(J_lista_final,[])
-print("A melhor execução foi a execução "+str(melhorExe))
+melhorExe = argmaxIndex(J_lista_final, [])
+print("A melhor execução foi a execução "+str(melhorExe+1))
 
+#salvar parâmetros
+J_lista_all = numpy.array(todos_J_exec)
+J_lista_final = numpy.array(J_lista_final)
+saveParameters(U_lista_final, G_lista_final, L_lista_final, J_lista_all, J_lista_final)
+
+#formar base CRISP
+matrix_fuzzy = U_lista_final[melhorExe]
+linha = 0
+controle_classe = 0
+valor_classe = 0
+clusters = []
+classes = []
+
+for i in matrix_fuzzy:
+    ind_cluster = numpy.argmax(i)
+    clusters.append(ind_cluster)
+    if (controle_classe == 200):
+        valor_classe += 1
+        classes.append(valor_classe)
+        controle_classe = 1
+    else:
+        classes.append(valor_classe)
+    controle_classe += 1
+    i = i.tolist()
+    for j in range(len(i)):
+        if (ind_cluster == j):
+            matrix_fuzzy[linha, j] = int(1)
+        else:
+            matrix_fuzzy[linha, j] = int(0)
+    linha += 1
+
+#salvar matrizes crisp, y
+matrix_crisp = matrix_fuzzy.astype('int')
+#matrix_crisp = matrix_crisp.tolist()
+saveMatrix(matrix_crisp, classes, clusters)
+
+value_index_rand = adjusted_rand_score(classes, clusters)
+saveResults(matrix_crisp, value_index_rand, melhorExe)
+
+#df = pd.DataFrame({'clusters' : clusters, 'labels' : classes})
+#teste=df.groupby('clusters').apply(lambda cluster: cluster.sum()/cluster.count())
+#print(teste)
 
 #resultados
 #lambda: vetor de medoids
 #crisp
-#num de obg de cada grupo
+#num de obj de cada grupo
 #indexRand: indice Rand corrigido

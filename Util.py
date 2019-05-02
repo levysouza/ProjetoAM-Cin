@@ -2,6 +2,8 @@ import numpy
 from sklearn import preprocessing
 import scipy
 import random
+import shutil
+import os
 
 def gerarLabel():
     y = []
@@ -45,7 +47,8 @@ def normalize_columns(data):
 def readDatabase():
     #Leitura dos dados
     print("Iniciando leitura dos dados")
-    src = "D:/Google Drive/Doutorado/AM/Projeto/Dataset/"
+    #src = "D:/Google Drive/Doutorado/AM/Projeto/Dataset/"
+    src = "C:/Users/Rafaella Souza/UFPE/AM/Datasets/"
     fac = numpy.genfromtxt(src + "mfeat-fac.txt")
     fou = numpy.genfromtxt(src + "mfeat-fou.txt")
     kar = numpy.genfromtxt(src + "mfeat-kar.txt")
@@ -156,3 +159,50 @@ def argmaxIndex(list,exclude):
                 i = argminIndex(list,exclude)
             indexList.append(i)
     return indexList[0]
+
+def saveParameters(lista_U, lista_G, lista_L, lista_J_all, lista_J_final):
+    for i in range(100):
+        path = './saida/exec_'+str(i+1)+'/'
+        os.makedirs(path)
+        numpy.savetxt('U_'+str(i+1)+'.txt', lista_U[i], delimiter=' ')
+        numpy.savetxt('G_'+str(i+1)+'.txt', lista_G[i], delimiter=' ')
+        numpy.savetxt('L_'+str(i+1)+'.txt', lista_L[i], delimiter=' ')
+        numpy.savetxt('Todos_J_'+str(i+1)+'.txt', lista_J_all[i], delimiter=' ')
+        shutil.move('U_'+str(i+1)+'.txt', 'saida/exec_'+str(i+1)+'/')
+        shutil.move('G_'+str(i+1)+'.txt', 'saida/exec_'+str(i+1)+'/')
+        shutil.move('L_'+str(i+1)+'.txt', 'saida/exec_'+str(i+1)+'/')
+        shutil.move('Todos_J_'+str(i+1)+'.txt', 'saida/exec_'+str(i+1)+'/')
+    numpy.savetxt('J_final_exec.txt', lista_J_final, delimiter=' ')
+    shutil.move('J_final_exec.txt', 'saida/')
+
+def saveMatrix(matrix_crisp, classes, clusters):
+    file_matrix_Crisp = open('Matrix_Crisp.txt', 'a')
+    classes_clusters = open('Classe_Cluster.txt', 'a')
+    clusters_y = open('Nova_Classe_Y.txt', 'a')
+    for i in matrix_crisp:
+        for j in i:
+            file_matrix_Crisp.write(str(j)+" ")
+        file_matrix_Crisp.write('\n')
+    file_matrix_Crisp.close()
+    for i in range(len(classes) or len(clusters)):
+        classes_clusters.write(str(classes[i]) + " " + str(clusters[i]) + '\n')
+        clusters_y.write(str(clusters[i]) + '\n')
+    classes_clusters.close()
+    clusters_y.close()
+    shutil.move('Matrix_Crisp.txt', 'saida/')
+    shutil.move('Classe_Cluster.txt', 'saida/')
+    shutil.move('Nova_Classe_Y.txt', 'saida/')
+
+def saveResults(matrix_crisp, value_index_rand, melhorExe):
+    form_results = ""
+    for w in range(10):
+        column = matrix_crisp[:, w]
+        sum_column = sum(column)
+        text = '\n A quantidade de elementos no cluster '+str(w)+' é '+str(int(sum_column))
+        form_results = form_results+text
+    form_results = form_results + "\n\n O Índice Rand Ajustado é " + str(value_index_rand) + \
+                        "\n\n A melhor execução foi a de número " + str(melhorExe+1)
+    file_result = open('Resultados_Cluster.txt', 'w')
+    file_result.write(form_results)
+    file_result.close()
+    shutil.move('Resultados_Cluster.txt', 'saida/')
